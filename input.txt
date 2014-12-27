@@ -1,0 +1,4 @@
+ZMH
+GOOGL
+MSFT
+AAPL
