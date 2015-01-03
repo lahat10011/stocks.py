@@ -1,6 +1,7 @@
 
 import time
 import urllib
+import re 
 
 def get_time ():
 	# looks up the date and time, returns a string
@@ -52,5 +53,29 @@ def get_stock_values (stock_abbreviations):
 	dictionary= dict(zip(stock_abbreviations,l))
 	return  dictionary
 	
+
+def remove_tags(html):
+	#returns a str without HTML tags. takes as input a html str
+        new = ''
+        level=0
+        for i in html:
+                if i == '<': level +=1
+                if level < 1: new +=i
+                if i == '>': level -=1
+        return new
+
+
+def tweets(q):
+	#returns 20 polon separated list of tweets of hashtag query
+        url = 'https://twitter.com/search?f=realtime&q=%23'+q+'&src=typd'
+        f = urllib.urlopen(url)
+        raw = f.read()
+        parts = raw.split('<p class="js-tweet-text tweet-text" lang="en" data-aria-label-part="0">')[1:]
+        out = ''
+        for part in parts:
+                text =remove_tags(part).split('...')[0]
+                text = text.split('\n')[0]
+                out += text + '|'
+        return out[:-1]
 	
 		
